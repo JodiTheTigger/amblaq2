@@ -1,0 +1,61 @@
+language: c
+
+matrix:
+  include:
+    - os: linux
+      dist: bionic
+      compiler: gcc
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+          packages:
+            - gcc-9
+            - g++-9
+            - ninja-build
+      env:
+        - CC=gcc-9
+        - CXX=g++-9
+        
+    - os: linux
+      dist: bionic
+      compiler: clang
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+            - llvm-toolchain-bionic-9
+          packages:
+            - clang-9
+            - ninja-build
+      env:
+        - CC=clang-9
+        - CXX=clang++-9
+
+    - os: osx
+      compiler: clang
+      addons:
+        homebrew:
+          packages:
+            - ninja
+          # Fixes travis-ci homebrew bug 
+          # https://travis-ci.community/t/macos-build-fails-because-of-homebrew-bundle-unknown-command/7296/10
+          update: true
+
+    # - os: windows
+    #   compiler: clang
+    #   before_install:
+    #       - choco install ninja
+    #   addons:
+    #     chocolatey:
+    #       packages:
+    #         - ninja
+
+script:
+  # - ls -ld /usr/bin/g+* || true
+  # - ls -ld /usr/bin/gcc* || true
+  - mkdir build
+  - cd build
+  - cmake .. -G Ninja -DCMAKE_BUILD_TYPE=RelWithDebInfo
+  - cmake --build .
+  - ctest -V --timeout 60

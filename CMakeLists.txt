@@ -1,6 +1,8 @@
 cmake_minimum_required(VERSION 3.1)  # target_sources
-project(queues3)
+project(amblaq2)
+enable_testing()
 
+set(DIR_ROOT    ${CMAKE_CURRENT_SOURCE_DIR})
 set(DIR_SOURCE  ${CMAKE_CURRENT_SOURCE_DIR}/src)
 set(DIR_INCLUDE ${CMAKE_CURRENT_SOURCE_DIR}/include)
 set(DIR_TESTS   ${CMAKE_CURRENT_SOURCE_DIR}/tests)
@@ -23,7 +25,9 @@ set(SOURCE_TESTS
 )
 
 set(SOURCE_MISC
-    ${CMAKE_CURRENT_SOURCE_DIR}/LICENSE
+    ${DIR_ROOT}/LICENSE
+    ${DIR_ROOT}/README.md
+    ${DIR_ROOT}/.travis.yml
 )
 
 # ------------------------------------------------------------------------------
@@ -46,6 +50,8 @@ target_include_directories(
 
 target_sources(${PROJECT_NAME} INTERFACE ${SOURCE})
 target_sources(${PROJECT_NAME} INTERFACE ${SOURCE_MISC})
+
+add_test(${PROJECT_TEST} ${PROJECT_TEST})
 
 # ------------------------------------------------------------------------------
 # Properties
@@ -88,21 +94,6 @@ private_c_flags(${PROJECT_TEST} "-Wextra")
 private_c_flags(${PROJECT_TEST} "/W4")
 private_c_flags(${PROJECT_TEST} "-Wshadow")
 
-# RAM: Clean up this mess.
-target_compile_options(${PROJECT_TEST} PRIVATE "-fsanitize=thread")
-target_link_options   (${PROJECT_TEST} PRIVATE "-fsanitize=thread")
-
-
-
-# -fsanitize=address
-# -fsanitize=leak
-# -fsanitize=thread
-# -fsanitize=undefined
-# -fsanitize-address-use-after-scope
-# -fstack-protector
-# -fstack-protector-all
-# -fstack-protector-strong
-
 # ------------------------------------------------------------------------------
 # Dependencies
 # ------------------------------------------------------------------------------
@@ -118,9 +109,6 @@ if (UNIX)
     target_link_libraries(
         ${PROJECT_TEST}
         PRIVATE
-            #tsan
-            #ubsan
-            #asan
             ${CMAKE_THREAD_LIBS_INIT}
     )
 endif()
