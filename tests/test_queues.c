@@ -11,11 +11,12 @@
 #include <queues/spsc.h>
 
 #if defined(__STDC_NO_THREADS__)
-    #error Cannot build tests, your C compiler does not support C11 threads :-(
+    #include "cpp11_thread.h"
+#else
+    #include <threads.h>
 #endif
 
 #include <stdio.h>
-#include <threads.h>
 
 // -----------------------------------------------------------------------------
 
