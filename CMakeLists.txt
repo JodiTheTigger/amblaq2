@@ -21,6 +21,8 @@ set(SOURCE
 )
 
 set(SOURCE_TESTS
+    ${DIR_TESTS}/cpp11_thread.cpp
+    ${DIR_TESTS}/cpp11_thread.h
     ${DIR_TESTS}/test_queues.c
 )
 
